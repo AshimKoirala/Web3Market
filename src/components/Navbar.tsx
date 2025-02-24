@@ -28,11 +28,11 @@ const Navbar = () => {
           {/* Conditional Rendering based on Authentication */}
           {!isAuthenticated ? (
             <div className="space-x-4">
-              <Link href="/login" className="text-white hover:text-teal-400 transition duration-200 ease-in-out">
+              <Link href="/auth/login" className="text-white hover:text-teal-400 transition duration-200 ease-in-out">
                 Login
               </Link>
               <Link
-                href="/signup"
+                href="/auth/signup"
                 className="bg-teal-600 px-4 py-2 rounded-lg hover:bg-teal-500 transition duration-200 ease-in-out"
               >
                 Sign Up

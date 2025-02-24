@@ -1,10 +1,9 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useAuth } from '@clerk/nextjs';
 
-export default function Home() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Mock authentication state
-
+export default function HomePage() {
+  const { isSignedIn } = useAuth();
   return (
     <div className="relative min-h-screen bg-gradient-to-r from-blue-500 to-teal-500 overflow-hidden">
       {/* Background Image */}
@@ -26,7 +25,7 @@ export default function Home() {
               Explore Posts
             </button>
           </Link>
-          <Link href={isAuthenticated ? "/dashboard" : "/login"}>
+          <Link href={isSignedIn ? '/dashboard' : '/auth/login'}>
             <button className="bg-blue-600 text-white px-8 py-3 rounded-xl shadow-lg hover:bg-white hover:text-blue-600 transition duration-300 transform hover:scale-105">
               Create a Post
             </button>
