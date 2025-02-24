@@ -1,9 +1,15 @@
 'use client';
 import Link from 'next/link';
+import { useAuth } from '@clerk/nextjs';
 import { useState } from 'react';
 
 const Navbar = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Mock authentication state
+  const { isSignedIn } = useAuth();  // Use Clerk's isSignedIn hook
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Track mobile menu state
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
     <nav className="bg-blue-700 text-white py-4 shadow-md">
@@ -18,6 +24,9 @@ const Navbar = () => {
           <Link href="/" className="text-white hover:text-teal-400 transition duration-200 ease-in-out">
             Home
           </Link>
+          <Link href="/posts" className="text-white hover:text-teal-400 transition duration-200 ease-in-out">
+            Posts
+          </Link>
           <Link href="/about" className="text-white hover:text-teal-400 transition duration-200 ease-in-out">
             About
           </Link>
@@ -26,7 +35,7 @@ const Navbar = () => {
           </Link>
 
           {/* Conditional Rendering based on Authentication */}
-          {!isAuthenticated ? (
+          {!isSignedIn ? (
             <div className="space-x-4">
               <Link href="/auth/login" className="text-white hover:text-teal-400 transition duration-200 ease-in-out">
                 Login
@@ -39,18 +48,24 @@ const Navbar = () => {
               </Link>
             </div>
           ) : (
+            <div className="space-x-4">
             <Link
               href="/dashboard"
-              className="text-white hover:text-teal-400 transition duration-200 ease-in-out"
+              className="bg-teal-500 px-4 py-2 rounded-lg text-white hover:bg-teal-700 hover:text-white transition duration-200 ease-in-out"
             >
               Dashboard
             </Link>
+            </div>
           )}
         </div>
 
         {/* Mobile Menu Button */}
         <div className="md:hidden">
-          <button className="text-white focus:outline-none" aria-label="Open Menu">
+          <button
+            className="text-white focus:outline-none"
+            aria-label="Open Menu"
+            onClick={toggleMobileMenu}
+          >
             <svg
               className="w-6 h-6"
               fill="none"
@@ -68,6 +83,46 @@ const Navbar = () => {
           </button>
         </div>
       </div>
+
+      {/* Mobile Menu Links (Only when menu is open) */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden flex flex-col items-center space-y-4 mt-4 bg-blue-700 text-white p-4">
+          <Link href="/" className="text-white hover:text-teal-400 transition duration-200 ease-in-out">
+            Home
+          </Link>
+          <Link href="/posts" className="text-white hover:text-teal-400 transition duration-200 ease-in-out">
+            Posts
+          </Link>
+          <Link href="/about" className="text-white hover:text-teal-400 transition duration-200 ease-in-out">
+            About
+          </Link>
+          <Link href="/contact" className="text-white hover:text-teal-400 transition duration-200 ease-in-out">
+            Contact
+          </Link>
+
+          {/* Conditional Rendering for Mobile Authentication */}
+          {!isSignedIn ? (
+            <div className="space-x-4">
+              <Link href="/auth/login" className="bg-teal-500 px-4 py-2 rounded-lg text-white hover:bg-teal-400 transition duration-200 ease-in-out">
+                Login
+              </Link>
+              <Link
+                href="/auth/signup"
+                className="bg-teal-500 px-4 py-2 rounded-lg text-white hover:bg-teal-400 transition duration-200 ease-in-out"
+              >
+                Sign Up
+              </Link>
+            </div>
+          ) : (
+            <Link
+              href="/dashboard"
+              className=" bg-teal-500 px-4 py-2 rounded-lg text-white hover:text-teal-400 transition duration-200 ease-in-out"
+            >
+              Dashboard
+            </Link>
+          )}
+        </div>
+      )}
     </nav>
   );
 };
